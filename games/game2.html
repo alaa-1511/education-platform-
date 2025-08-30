@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../Css/all.css">
+    <title>لعبة ترتيب الجملة</title>
+    <style>
+              body { font-family: 'Tajawal', sans-serif; text-align: center; direction: rtl; background: linear-gradient(135deg, #FFB6C1, #87CEEB); margin: 0; padding: 0; color: #fff; }
+        h1 { margin-top: 30px; font-size: 60px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); }
+        p{
+            color: #555;
+            padding:20px 0 30px ;
+        }
+        .container {
+             max-width: 700px; margin: auto;
+              background: rgba(255, 255, 255, 0.9); 
+              padding: 30px;
+               border-radius: 15px; 
+              box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); 
+              color: #333; 
+            }
+            .to-back{
+            position: relative;
+        }
+        .back {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        .word-container, .drop-container { display: flex; justify-content: center; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+        .word { padding: 14px 18px; background: #CBA1E0; color: white; border-radius: 12px; cursor: grab; font-size: 20px; transition: transform 0.3s, box-shadow 0.3s; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2); }
+        .word:hover { transform: scale(1.1); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); }
+        .drop-zone { min-width: 70px; padding: 14px; background: #eee; border: 2px dashed #555; border-radius: 12px; display: inline-block; transition: background 0.3s, border-color 0.3s; min-height: 40px; }
+        .drop-zone:hover { background: #ccc; border-color: #CBA1E0; }
+        .buttons { margin-top: 25px; }
+        button { padding: 15px 40px; font-size: 20px; margin: 15px; cursor: pointer; border: none; border-radius: 10px; transition: background 0.3s, transform 0.2s; font-weight: bold; }
+        button:hover { transform: scale(1.1); }
+        #prev-btn { background: #FF8C9E; color: white; }
+        #next-btn { background: #FF4E88; color: white; }
+        #check-btn { background: #009688; color: white; }
+        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8); background: rgba(255, 255, 255, 0.95); padding: 25px; border-radius: 12px; box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3); text-align: center; transition: transform 0.3s ease-in-out; }
+        .modal.show { transform: translate(-50%, -50%) scale(1); }
+        .modal-content { font-size: 22px; margin-bottom: 15px; color: #333; }
+        .modal button { background: #007BFF; color: white; }
+    </style>
+</head>
+<body>
+    <div class="to-back">
+       
+        <a class="back" href="../StudentDash.html"> <i class="fa-solid fa-light fa-arrow-left"></i></a>
+
+    </div>
+    <h1>لعبة ترتيب الجملة</h1>
+    <div class="container">
+        <p>رتب الكلمات لتكوين جملة صحيحة</p>
+        <div id="drop-container" class="drop-container"></div>
+        <div class="word-container" id="word-container"></div>
+        <div class="buttons">
+            <button onclick="prevLevel()" id="prev-btn" disabled>السابق</button>
+            <button onclick="checkSentence()" id="check-btn">تحقق</button>
+            <button onclick="nextLevel()" id="next-btn" disabled>التالي</button>
+        </div>
+    </div>
+    <div id="modal" class="modal">
+        <p id="modal-message" class="modal-content"></p>
+        <button onclick="closeModal()">حسناً</button>
+    </div>
+    <script>
+        const sentences = [
+            "العلم نور", "الكتاب صديقي", "الصدق منجاة", "التعليم مفتاح النجاح", "الرياضة تقوي الجسم",
+            "الشمس تشرق صباحًا", "القمر يضيء الليل", "اللغة العربية جميلة", "الماء سر الحياة", "الصداقة كنز",
+            "المعلم نور المعرفة", "الحديقة مليئة بالأزهار", "القطة تحب الحليب", "السيارة تسير بسرعة", "الوقت كالسيف إن لم تقطعه قطعك",
+            "العمل عبادة", "القراءة غذاء العقل", "المدرسة بيت العلم", "الأمل يصنع المعجزات", "السماء زرقاء صافية"
+        ];
+        let currentLevel = 0;
+        function loadLevel(level) {
+            document.getElementById("drop-container").innerHTML = "";
+            document.getElementById("word-container").innerHTML = "";
+            document.getElementById("next-btn").disabled = true;
+            document.getElementById("prev-btn").disabled = level === 0;
+            let sentence = sentences[level];
+            let words = sentence.split(" ").sort(() => Math.random() - 0.5);
+            words.forEach(word => {
+                let span = document.createElement("span");
+                span.classList.add("word");
+                span.textContent = word;
+                span.draggable = true;
+                span.addEventListener("dragstart", dragStart);
+                document.getElementById("word-container").appendChild(span);
+            });
+            sentence.split(" ").forEach(() => {
+                let dropZone = document.createElement("span");
+                dropZone.classList.add("drop-zone");
+                dropZone.addEventListener("dragover", dragOver);
+                dropZone.addEventListener("drop", drop);
+                document.getElementById("drop-container").appendChild(dropZone);
+            });
+        }
+        function dragStart(event) { event.dataTransfer.setData("text", event.target.textContent); }
+        function dragOver(event) { event.preventDefault(); }
+        function drop(event) {
+            event.preventDefault();
+            let text = event.dataTransfer.getData("text");
+            event.target.textContent = text;
+        }
+        function checkSentence() {
+            let arrangedWords = Array.from(document.getElementById("drop-container").children).map(span => span.textContent).join(" ");
+            let modal = document.getElementById("modal");
+            let modalMessage = document.getElementById("modal-message");
+            if (arrangedWords === sentences[currentLevel]) {
+                modalMessage.textContent = "أحسنت! الجملة صحيحة ✅";
+                document.getElementById("next-btn").disabled = false;
+            } else {
+                modalMessage.textContent = "حاول مرة أخرى ❌";
+            }
+            modal.style.display = "block";
+        }
+        function closeModal() { document.getElementById("modal").style.display = "none"; }
+        function nextLevel() { if (currentLevel < sentences.length - 1) { currentLevel++; loadLevel(currentLevel); } }
+        function prevLevel() { if (currentLevel > 0) { currentLevel--; loadLevel(currentLevel); } }
+        loadLevel(currentLevel);
+    </script>
+</body>
+</html> 
+
+
+
+

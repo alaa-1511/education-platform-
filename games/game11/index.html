@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رحلة الطالب في كواكب المعرفة</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../../Css/all.css">
+</head>
+<body>
+    <div class="to-back">
+       
+        <a class="back" href="../../StudentDash.html"> <i class="fa-solid fa-light fa-arrow-left"></i></a>
+
+    </div>
+    <div class="container">
+       <div class="right-box">
+        <h1>رحلة الطالب في كواكب المعرفة</h1>
+        <div class="img-box">
+            <img src="./img/png-clipart-play-child-child-game-child-removebg-preview.png" alt="">
+        </div>
+       </div>
+
+        <div class="world-selector">
+            <h2>اختر عالمًا</h2>
+            <button onclick="startQuiz('space')">عالم الفضاء</button>
+            <button onclick="startQuiz('math')">عالم الرياضيات</button>
+            <button onclick="startQuiz('arabic')">عالم اللغة العربية</button>
+            <button onclick="startQuiz('english')">عالم الإنجليزية</button>
+            <button onclick="startQuiz('history')">عالم التاريخ</button>
+            <button onclick="startQuiz('engineering')">عالم الهندسة</button>
+            <button onclick="startQuiz('science')">عالم العلوم</button>
+            <button onclick="startQuiz('social')">عالم الدراسات الاجتماعية</button>
+        </div>
+
+        <div id="quiz-container" class="quiz-container">
+            <div id="question-container">
+                <h2 id="question"></h2>
+                <div id="answers"></div>
+            </div>
+            <div id="robot-response"></div>
+            <button id="next-btn" onclick="nextQuestion()">التالي</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+

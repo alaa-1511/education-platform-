@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../Css/all.css">
+    <link rel="stylesheet" href="../Css/bootstrap.min.css">
+    <title>لعبة تصميم المباني الهندسية</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+            background-image: url("./img-game/14123537.png");
+      background-position: center;
+      background-size:cover ;
+            color: white;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+        }
+        .overlay {
+  background-color: rgba(0, 0, 0, 0.5); /* طبقة بيضاء شفافة */
+  width: 100%;
+
+}
+        .to-back{
+            position: relative;
+        }
+        .back {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        .container {
+            
+            padding: 20px;
+            border-radius: 15px;
+            
+            display: inline-block;
+            margin-top: 20px;
+            width: 600px;
+        }
+        .game-area {
+            width: 100%;
+            height: 400px;
+            background: #f0f0f0;
+            border: 4px solid #2980b9;
+            margin: 20px auto;
+            position: relative;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        .shapes {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .shape {
+            width: 60px;
+            height: 60px;
+            cursor: grab;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #34495e;
+            transition: transform 0.2s;
+            position: relative;
+        }
+        .shape:hover {
+            transform: scale(1.1);
+        }
+        .triangle {
+            width: 0;
+            height: 0;
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+            border-bottom: 60px solid red;
+            display: inline-block;
+        }
+        .square {
+            background: blue;
+            border-radius: 5px;
+        }
+        .circle {
+            background: green;
+            border-radius: 50%;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px;
+            background-color: #27ae60;
+            color: white;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #2ecc71;
+        }
+    </style>
+</head>
+<body >
+    <div class="overlay">
+    <div class="to-back">
+       
+        <a class="back" href="../StudentDash.html"> <i class="fa-solid fa-light fa-arrow-left"></i></a>
+
+    </div>
+    <h1>لعبة تصميم المباني الهندسية</h1>
+    <div class="container">
+        <p class="h4"> اسحب وأفلت الأشكال لإنشاء هيكل هندسي!</p>
+        <div class="game-area" id="gameArea"></div>
+        <div class="shapes">
+            <div class="shape square" onclick="createShape('square')"></div>
+            <div class="shape circle" onclick="createShape('circle')"></div>
+            <div class="shape triangle" onclick="createShape('triangle')"></div>
+        </div>
+        <div class="buttons">
+            <button onclick="undoLastAction()">تراجع</button>
+            <button onclick="clearCanvas()">مسح الرسم</button>
+        </div>
+    </div>
+    </div>
+    <script>
+        let gameArea = document.getElementById("gameArea");
+        let lastElements = [];
+
+        function createShape(shapeType) {
+            let newElement = document.createElement("div");
+            newElement.classList.add("shape", shapeType);
+            newElement.style.position = "absolute";
+            newElement.style.left = "10px";
+            newElement.style.top = "10px";
+            newElement.draggable = true;
+            newElement.ondragstart = dragStart;
+            
+            if (shapeType === "triangle") {
+                newElement.style.width = "0";
+                newElement.style.height = "0";
+                newElement.style.borderLeft = "30px solid transparent";
+                newElement.style.borderRight = "30px solid transparent";
+                newElement.style.borderBottom = "60px solid red";
+            } else {
+                newElement.style.width = "60px";
+                newElement.style.height = "60px";
+            }
+            
+            gameArea.appendChild(newElement);
+            lastElements.push(newElement);
+        }
+
+        function dragStart(event) {
+            event.dataTransfer.setData("text/plain", event.target.id);
+            event.dataTransfer.setData("shape-type", event.target.classList[1]);
+        }
+
+        gameArea.ondragover = function(event) {
+            event.preventDefault();
+        };
+
+        gameArea.ondrop = function(event) {
+            event.preventDefault();
+            let rect = gameArea.getBoundingClientRect();
+            let x = event.clientX - rect.left - 30;
+            let y = event.clientY - rect.top - 30;
+            let shapeType = event.dataTransfer.getData("shape-type");
+            
+            let newElement = document.createElement("div");
+            newElement.classList.add("shape", shapeType);
+            newElement.style.position = "absolute";
+            newElement.style.left = x + "px";
+            newElement.style.top = y + "px";
+            newElement.draggable = true;
+            newElement.ondragstart = dragStart;
+            
+            if (shapeType === "triangle") {
+                newElement.style.width = "0";
+                newElement.style.height = "0";
+                newElement.style.borderLeft = "30px solid transparent";
+                newElement.style.borderRight = "30px solid transparent";
+                newElement.style.borderBottom = "60px solid red";
+            } else {
+                newElement.style.width = "60px";
+                newElement.style.height = "60px";
+            }
+            
+            gameArea.appendChild(newElement);
+            lastElements.push(newElement);
+        };
+
+        function undoLastAction() {
+            if (lastElements.length > 0) {
+                let lastElement = lastElements.pop();
+                lastElement.remove();
+            }
+        }
+
+        function clearCanvas() {
+            gameArea.innerHTML = "";
+            lastElements = [];
+        }
+    </script>
+</body>
+</html>
+
+

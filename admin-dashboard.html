@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./Css/all.css">
+    <link rel="stylesheet" href="./Css/bootstrap.min.css">
+    <link rel="stylesheet" href="./Css/styles.css">
+    <link rel="stylesheet" href="./Css/chatbot.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Admin Dashboard</title>
+</head>
+
+<body>
+<div class="wrapper">
+    <aside id="sidebar" class="js-sidebar ">
+        <div style="height: 100vh;">
+            <div class="sidebar-logo">
+                <a href="#">EduFun</a>
+            </div>
+            <ul class="sidebar-nav">
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link active" data-section="dashboard">
+                        <i class="fa-solid fa-house pe-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-section="users">
+                        <i class="fa-solid fa-users pe-2"></i> Users Management
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-section="courses">
+                        <i class="fa-solid fa-book-open pe-2"></i> Courses
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-section="sections">
+                        <i class="fa-solid fa-layer-group pe-2"></i> Sections
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-section="exams">
+                        <i class="fa-solid fa-file-alt pe-2"></i> Exams
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-section="reports">
+                        <i class="fa-solid fa-chart-bar pe-2"></i> Reports
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-section="settings">
+                        <i class="fa-solid fa-gear pe-2"></i> Settings
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+    <div class="main">
+        <nav class="navbar navbar-expand px-3 border-bottom">
+            <button class="btn" id="sidebar-toggle" type="button">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class=" navbar">
+                <ul class="navbar-nav">
+                    <li class=" dropdown">
+                        <a href="#" data-bs-toggle="dropdown" class="nav-icon pe-md-0">
+                            <img src="IMG/perfil.png" class="avatar img-fluid rounded" alt="">
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a href="#" onclick="logout()" class="dropdown-item sidebar-link ">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <main class="content px-3 py-2">
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="section" style="display: block;">
+                <div class="row mb-4">
+                    <div class="col-md-3 dashcard">
+                        <div class="card stat-card shadow-sm">
+                            <div class="card-body text-center">
+                                <h5 class="card-title text-secondary">Total Users</h5>
+                                <p class="card-text display-6 text-primary" id="totalUsers">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 dashcard">
+                        <div class="card stat-card shadow-sm">
+                            <div class="card-body text-center">
+                                <h5 class="card-title text-secondary">Total Courses</h5>
+                                <p class="card-text display-6 text-success" id="totalCourses">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 dashcard">
+                        <div class="card stat-card shadow-sm">
+                            <div class="card-body text-center">
+                                <h5 class="card-title text-secondary">Active Students</h5>
+                                <p class="card-text display-6 text-warning" id="activeStudents">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 dashcard">
+                        <div class="card stat-card shadow-sm">
+                            <div class="card-body text-center">
+                                <h5 class="card-title text-secondary">Total Teachers</h5>
+                                <p class="card-text display-6 text-info" id="totalTeachers">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <!-- User Growth Chart -->
+                    <div class="col-md-6">
+                        <div class="card shadow-sm">
+                            <div class="card-header">
+                                <h5 class="mb-0">User Growth</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="userGrowthChart" width="400" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Course Enrollment Chart -->
+                    <div class="col-md-6">
+                        <div class="card shadow-sm">
+                            <div class="card-header">
+                                <h5 class="mb-0">Course Enrollment</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="courseEnrollmentChart" width="400" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <div class="card shadow-sm">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Recent Activities</h5>
+                                <button class="btn btn-sm btn-primary" id="refreshActivities">Refresh</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>User</th>
+                                                <th>Action</th>
+                                                <th>Details</th>
+                                                <th>Time</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="recentActivitiesTable">
+                                            <tr><td colspan="4" class="text-center">Loading activities...</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Management Section -->
+            <div id="users" class="section" style="display: none;">
+                <div class="card shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Users Management</h5>
+                        <div>
+                            <button class="btn btn-sm btn-outline-primary me-2" id="filterUsers">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                            <button class="btn btn-sm btn-primary" id="addUserBtn">
+                                <i class="fas fa-plus"></i> Add User
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTableBody">
+                                    <tr><td colspan="6" class="text-center">Loading users...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <nav aria-label="Page navigation" class="mt-4">
+                            <ul class="pagination justify-content-center" id="usersPagination">
+                                <!-- Pagination will be added dynamically -->
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add/Edit User Modal -->
+            <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="userModalLabel">Add New User</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="userForm">
+                                <input type="hidden" id="userId">
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="username" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="password">
+                                    <small class="text-muted">Leave blank to keep existing password when editing</small>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="role" class="form-label">Role</label>
+                                    <select class="form-select" id="role" required>
+                                        <option value="Student">Student</option>
+                                        <option value="Teacher">Teacher</option>
+                                        <option value="Admin">Admin</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3" id="sectionField" style="display: none;">
+                                    <label for="section" class="form-label">Section</label>
+                                    <select class="form-select" id="section">
+                                        <option value="">Select Section</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3" id="academicYearField" style="display: none;">
+                                    <label for="academicYear" class="form-label">Academic Year</label>
+                                    <select class="form-select" id="academicYear">
+                                        <option value="">Select Academic Year</option>
+                                        <option value="2023-2024">2023-2024</option>
+                                        <option value="2024-2025">2024-2025</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="status" class="form-label">Status</label>
+                                    <select class="form-select" id="status" required>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary" id="saveUserBtn">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Courses Section -->
+            <div id="courses" class="section" style="display: none;">
+                <div class="card shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Courses Management</h5>
+                        <button class="btn btn-sm btn-primary" id="addCourseBtn">
+                            <i class="fas fa-plus"></i> Add Course
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4" id="coursesContainer">
+                            <!-- Courses will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add/Edit Course Modal -->
+            <div class="modal fade" id="courseModal" tabindex="-1" aria-labelledby="courseModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="courseModalLabel">Add New Course</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="courseForm">
+                                <input type="hidden" id="courseId">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="courseTitle" class="form-label">Course Title</label>
+                                        <input type="text" class="form-control" id="courseTitle" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="courseInstructor" class="form-label">Instructor</label>
+                                        <select class="form-select" id="courseInstructor" required>
+                                            <option value="">Select Instructor</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="courseDescription" class="form-label">Description</label>
+                                    <textarea class="form-control" id="courseDescription" rows="3" required></textarea>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="courseDuration" class="form-label">Duration (hours)</label>
+                                        <input type="number" class="form-control" id="courseDuration" min="1" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="courseLevel" class="form-label">Level</label>
+                                        <select class="form-select" id="courseLevel" required>
+                                            <option value="Beginner">Beginner</option>
+                                            <option value="Intermediate">Intermediate</option>
+                                            <option value="Advanced">Advanced</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="courseImage" class="form-label">Course Image</label>
+                                    <input type="file" class="form-control" id="courseImage" accept="image/*">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Course Content</label>
+                                    <div id="courseContentItems">
+                                        <!-- Content items will be added here -->
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-outline-primary mt-2" id="addContentItem">
+                                        <i class="fas fa-plus"></i> Add Content Item
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary" id="saveCourseBtn">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sections Section -->
+            <div id="sections" class="section" style="display: none;">
+                <div class="card shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Sections Management</h5>
+                        <button class="btn btn-sm btn-primary" id="addSectionBtn">
+                            <i class="fas fa-plus"></i> Add Section
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="academicYearFilter">Academic Year</label>
+                                    <select class="form-select" id="academicYearFilter">
+                                        <option value="">All Academic Years</option>
+                                        <option value="2023-2024">2023-2024</option>
+                                        <option value="2024-2025">2024-2025</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Section Name</th>
+                                        <th>Grade Level</th>
+                                        <th>Academic Year</th>
+                                        <th>Students Count</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="sectionsTableBody">
+                                    <tr><td colspan="6" class="text-center">Loading sections...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add/Edit Section Modal -->
+            <div class="modal fade" id="sectionModal" tabindex="-1" aria-labelledby="sectionModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="sectionModalLabel">Add New Section</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="sectionForm">
+                                <input type="hidden" id="sectionId">
+                                <div class="mb-3">
+                                    <label for="sectionName" class="form-label">Section Name</label>
+                                    <input type="text" class="form-control" id="sectionName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="gradeLevel" class="form-label">Grade Level</label>
+                                    <select class="form-select" id="gradeLevel" required>
+                                        <option value="الصف الأول">الصف الأول</option>
+                                        <option value="الصف الثاني">الصف الثاني</option>
+                                        <option value="الصف الثالث">الصف الثالث</option>
+                                        <option value="الصف الرابع">الصف الرابع</option>
+                                        <option value="الصف الخامس">الصف الخامس</option>
+                                        <option value="الصف السادس">الصف السادس</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="sectionAcademicYear" class="form-label">Academic Year</label>
+                                    <select class="form-select" id="sectionAcademicYear" required>
+                                        <option value="2023-2024">2023-2024</option>
+                                        <option value="2024-2025">2024-2025</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary" id="saveSectionBtn">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exams Section -->
+            <div id="exams" class="section" style="display: none;">
+                <div class="card shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Exams Management</h5>
+                        <button class="btn btn-sm btn-primary" id="addExamBtn">
+                            <i class="fas fa-plus"></i> Add Exam
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Title</th>
+                                        <th>Course</th>
+                                        <th>Date</th>
+                                        <th>Duration</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="examsTableBody">
+                                    <tr><td colspan="7" class="text-center">Loading exams...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Section -->
+            <div id="reports" class="section" style="display: none;">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h5 class="mb-0">Reports</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">Student Performance</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="studentPerformanceChart" width="400" height="200"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">Course Completion Rates</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="courseCompletionChart" width="400" height="200"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0">Export Reports</h5>
+                                        <div>
+                                            <button class="btn btn-sm btn-outline-primary me-2" id="exportStudentReport">
+                                                <i class="fas fa-file-excel"></i> Student Report
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-primary me-2" id="exportCourseReport">
+                                                <i class="fas fa-file-excel"></i> Course Report
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-primary" id="exportExamReport">
+                                                <i class="fas fa-file-excel"></i> Exam Report
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Report Name</th>
+                                                        <th>Last Generated</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="reportsTableBody">
+                                                    <tr><td colspan="3" class="text-center">Loading reports...</td></tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settings" class="section" style="display: none;">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h5 class="mb-0">System Settings</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="settingsForm">
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <h5>General Settings</h5>
+                                    <div class="mb-3">
+                                        <label for="siteName" class="form-label">Site Name</label>
+                                        <input type="text" class="form-control" id="siteName" value="EduFun">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="siteEmail" class="form-label">Site Email</label>
+                                        <input type="email" class="form-control" id="siteEmail" value="admin@edufun.com">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="maintenanceMode" class="form-label">Maintenance Mode</label>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="maintenanceMode">
+                                            <label class="form-check-label" for="maintenanceMode">Enable</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Academic Settings</h5>
+                                    <div class="mb-3">
+                                        <label for="currentAcademicYear" class="form-label">Current Academic Year</label>
+                                        <select class="form-select" id="currentAcademicYear">
+                                            <option value="2023-2024">2023-2024</option>
+                                            <option value="2024-2025">2024-2025</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="defaultSectionCount" class="form-label">Default Sections per Grade</label>
+                                        <input type="number" class="form-control" id="defaultSectionCount" value="6" min="1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <h5>Email Settings</h5>
+                                    <div class="mb-3">
+                                        <label for="smtpHost" class="form-label">SMTP Host</label>
+                                        <input type="text" class="form-control" id="smtpHost" value="smtp.example.com">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="smtpPort" class="form-label">SMTP Port</label>
+                                                <input type="number" class="form-control" id="smtpPort" value="587">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="smtpUsername" class="form-label">SMTP Username</label>
+                                                <input type="text" class="form-control" id="smtpUsername" value="admin@example.com">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="smtpPassword" class="form-label">SMTP Password</label>
+                                        <input type="password" class="form-control" id="smtpPassword" value="********">
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary" id="saveSettingsBtn">Save Settings</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+           
+        </main>
+        <a href="#" class="theme-toggle">
+            <i class="fa-regular fa-moon"></i>
+            <i class="fa-regular fa-sun"></i>
+        </a>
+
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="enrollmentToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">Enrollment Status</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="toastMessage">
+            Course enrolled successfully!
+        </div>
+    </div>
+</div>
+
+<!-- Chatbot Container -->
+<div class="chat-container hidden" id="chat-container">
+    <button id="chat-toggle">
+        <span>Chat with AI Assistant</span>
+        <i class="fas fa-comments"></i>
+    </button>
+    <div id="chat-box"></div>
+    <div class="chat-input-container">
+        <input type="text" id="user-input" placeholder="Type your message...">
+        <button id="send-button">
+            <i class="fas fa-paper-plane"></i>
+        </button>
+    </div>
+</div>
+
+<script src="./js/bootstrap.bundle.min.js"></script>
+<script src="./js/main.js"></script>
+<script src="./js/admin-dashboard.js"></script>
+<script src="./js/chatbot.js"></script>
+</body>
+
+</html>

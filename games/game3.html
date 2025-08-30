@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../Css/all.css">
+    <link rel="stylesheet" href="../Css/bootstrap.min.css">
+    <title>اختبار التناظر</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+            /* background-color: #e3f2fd;
+             */
+             background-image: url("./img-game/11397919-removebg-preview.png");
+      background-position: center;
+      background-size:cover ;
+        }
+        .overlay {
+  background-color: rgba(0, 0, 0, 0.5); /* طبقة بيضاء شفافة */
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+        .to-back{
+            position: relative;
+        }
+        .back {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        canvas {
+            background: white;
+            border: 4px solid #0288d1;
+            display: block;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        button {
+            padding: 12px 20px;
+            margin: 10px;
+            border: none;
+            cursor: pointer;
+            background-color: #0288d1;
+            color: white;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+        button:hover {
+            background-color: #0277bd;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 50%;
+            text-align: center;
+        }
+        .close {
+            color: red;
+            float: right;
+            font-size: 28px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="to-back">
+       
+        <a class="back" href="../StudentDash.html"> <i class="fa-solid fa-light fa-arrow-left"></i></a>
+
+    </div>
+    <div class="overlay">
+    <h1 class="text-white">لعبة اختبار التناظر</h1>
+    <p class="text-white h4" >اختر المستوى ثم حاول رسم النصف الآخر من الشكل!</p>
+    <div class="item">
+        <select id="levelSelector" onchange="changeLevel()">
+            <option value="1">المستوى 1</option>
+            <option value="2">المستوى 2</option>
+            <option value="3">المستوى 3</option>
+            <option value="4">المستوى 4</option>
+            <option value="5">المستوى 5</option>
+        </select>
+        <canvas id="symmetryCanvas" width="400" height="400"></canvas>
+        <div class="buttons">
+            <button onclick="clearCanvas()">إعادة المحاولة</button>
+            <button onclick="checkSymmetry()">تحقق من التناظر</button>
+        </div>
+        
+        <div id="errorModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <p>الرسم غير متماثل، حاول مرة أخرى!</p>
+            </div>
+        </div>
+    </div>
+        
+        <div id="successModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeSuccessModal()">&times;</span>
+                <p>أحسنت! لقد قمت بعمل رائع! 🎉</p>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="item">
+        <img src="./pngtree-3d-cute-student-character-bring-some-books-with-run-png-image_14597795.png" alt="">
+    </div> -->
+    
+    <script>
+        const canvas = document.getElementById("symmetryCanvas");
+        const ctx = canvas.getContext("2d");
+        let drawing = false;
+        let level = 1;
+
+        function drawHalfShape() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = "black";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(200, 50);
+            ctx.lineTo(200, 350);
+            ctx.stroke();
+            
+            if (level === 1) {
+                ctx.beginPath();
+                ctx.moveTo(200, 100);
+                ctx.lineTo(100, 200);
+                ctx.lineTo(200, 300);
+                ctx.stroke();
+            } else if (level === 2) {
+                ctx.beginPath();
+                ctx.arc(200, 200, 80, 0, Math.PI, true);
+                ctx.stroke();
+            } else if (level === 3) {
+                ctx.beginPath();
+                ctx.rect(100, 100, 100, 200);
+                ctx.stroke();
+            } else if (level === 4) {
+                ctx.beginPath();
+                ctx.moveTo(200, 100);
+                ctx.lineTo(150, 200);
+                ctx.lineTo(200, 300);
+                ctx.stroke();
+            } else if (level === 5) {
+                ctx.beginPath();
+                ctx.arc(200, 200, 60, Math.PI / 2, (3 * Math.PI) / 2);
+                ctx.stroke();
+            }
+        }
+
+        function startDrawing(event) {
+            drawing = true;
+            ctx.beginPath();
+            ctx.moveTo(event.offsetX, event.offsetY);
+        }
+
+        function draw(event) {
+            if (!drawing) return;
+            ctx.strokeStyle = "red";
+            ctx.lineWidth = 3;
+            ctx.lineTo(event.offsetX, event.offsetY);
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            drawing = false;
+            ctx.beginPath();
+        }
+
+        function clearCanvas() {
+            drawHalfShape();
+        }
+
+        function checkSymmetry() {
+            let isSymmetric = Math.random() < 0.5;
+            if (!isSymmetric) {
+                document.getElementById("errorModal").style.display = "block";
+            } else {
+                document.getElementById("successModal").style.display = "block";
+            }
+        }
+
+        function closeModal() {
+            document.getElementById("errorModal").style.display = "none";
+        }
+
+        function closeSuccessModal() {
+            document.getElementById("successModal").style.display = "none";
+        }
+
+        function changeLevel() {
+            level = parseInt(document.getElementById("levelSelector").value);
+            drawHalfShape();
+        }
+
+        canvas.addEventListener("mousedown", startDrawing);
+        canvas.addEventListener("mousemove", draw);
+        canvas.addEventListener("mouseup", stopDrawing);
+        canvas.addEventListener("mouseout", stopDrawing);
+
+        drawHalfShape();
+    </script>
+</body>
+</html>
+
+

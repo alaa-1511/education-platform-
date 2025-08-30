@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>مغامرة نبيه الذكي</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../Css/all.css">
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-image: url("img-game/291374.jpeg.webp");
+      background-repeat:no-repeat ;
+      background-size: cover;
+      background-position:center ;
+      text-align: center;
+      direction: rtl;
+      margin: 0;
+      padding: 0;
+      height: 80vh;
+    }
+    .overlay {
+  background-color: rgba(0, 0, 0, 0.5); /* طبقة بيضاء شفافة */
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.to-back{
+            position: relative;
+        }
+        .back {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        .back-btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+        }
+    .game-container {
+      margin: 50px auto;
+      padding: 30px;
+
+      border-radius: 25px;
+      width: 95%;
+      max-width: 650px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      
+    }
+
+    h1 {
+      font-size: 34px;
+      color: #00796b;
+      margin-bottom: 20px;
+    }
+
+    #chat-box {
+      height: 280px;
+      overflow-y: auto;
+      border: 1px solid #4dd0e1;
+      border-radius: 20px;
+      padding: 15px;
+      /* background: #e0f2f1; */
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .message {
+      padding: 12px 16px;
+      margin: 10px 0;
+      border-radius: 10px;
+      max-width: 85%;
+      word-wrap: break-word;
+      display: inline-block;
+      text-align: right;
+      box-shadow: 0 0px 3px rgba(0,0,0,0.1);
+    }
+
+    .bot {
+      background-color: #b2ebf2;
+      color: #004d40;
+      align-self: flex-start;
+    }
+
+    .user {
+      background-color: #c8e6c9;
+      color: #1b5e20;
+      align-self: flex-end;
+    }
+
+    input {
+      padding: 12px;
+      font-size: 18px;
+      border: 1px solid #4dd0e1;
+      border-radius: 12px;
+      width: 60%;
+      max-width: 300px;
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 18px;
+      background-color: #00acc1;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-right: 10px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #007c91;
+    }
+
+    #score-box {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #004d40;
+    }
+  </style>
+</head>
+<body>
+  <div class="to-back">
+       
+    <a class="back" href="../StudentDash.html"> <i class="fa-solid fa-light fa-arrow-left"></i></a>
+
+</div>
+  <div class="overlay">
+    <div class="game-container">
+      <h1>🤖 مغامرة نبيه الذكي</h1>
+      <div id="chat-box">
+        <div class="message bot">مرحباً! أنا نبيه، هل أنت مستعد لأسئلة الذكاء؟</div>
+      </div>
+      <input type="text" id="user-input" placeholder="اكتب إجابتك هنا..." />
+      <button onclick="handleUserInput()">إرسال</button>
+      <div id="score-box">النتيجة: <span id="score">0</span></div>
+    </div>
+  </div>
+  <script>
+    const questions = [
+      { q: "ما هو ناتج 3 + 4؟", a: "7" },
+      { q: "ما هو الحيوان الذي يقول 'مواء'؟", a: "قطة" },
+      { q: "كم عدد أرجل العنكبوت؟", a: "8" },
+      { q: "ما هو لون السماء في النهار؟", a: "أزرق" },
+      { q: "رتب الأرقام التالية تصاعديًا: 2، 5، 1", a: "1 2 5" },
+      { q: "ما عاصمة مصر؟", a: "القاهرة" },
+      { q: "ما هو عدد أيام الأسبوع؟", a: "7" },
+      { q: "كم ثانية في الدقيقة؟", a: "60" },
+      { q: "ما الحيوان الذي يُطلق عليه ملك الغابة؟", a: "أسد" },
+      { q: "كم عدد الحواس في الإنسان؟", a: "5" },
+      { q: "ما هو لون الموز؟", a: "أصفر" },
+      { q: "كم عدد أصابع اليد الواحدة؟", a: "5" },
+      { q: "ما هو ناتج 10 - 3؟", a: "7" },
+      { q: "ما اسم الكوكب الأحمر؟", a: "المريخ" },
+      { q: "أي طائر يُقلد الكلام؟", a: "ببغاء" },
+      { q: "ما هو الشيء الذي نأكله وله قلب؟", a: "الخس" },
+      { q: "ما هو ناتج 5 × 3؟", a: "15" },
+      { q: "ما عاصمة السعودية؟", a: "الرياض" },
+      { q: "ما اسم أطول نهر في العالم؟", a: "النيل" },
+      { q: "كم عدد أرجل الحصان؟", a: "4" },
+      { q: "كم شهر في السنة؟", a: "12" },
+      { q: "كم عدد القارات؟", a: "7" },
+      { q: "ما هو صوت الكلب؟", a: "نبح" },
+      { q: "ما هو الحيوان الذي له خرطوم؟", a: "فيل" },
+      { q: "كم دقيقة في الساعة؟", a: "60" },
+      { q: "ما هو ناتج 6 ÷ 2؟", a: "3" },
+      { q: "ما لون التفاح غالبًا؟", a: "أحمر" },
+      { q: "أي حيوان يعيش في الماء؟", a: "سمكة" },
+      { q: "ما هو أكبر عضو في جسم الإنسان؟", a: "الجلد" },
+      { q: "ما هو الشيء الذي ينبض ولا قلب له؟", a: "الساعة" },
+      { q: "ما هو الشيء الذي نراه ولا نلمسه؟", a: "الظل" },
+      { q: "ما اسم أول سورة في القرآن؟", a: "الفاتحة" },
+      { q: "كم عدد الأسنان في فم الإنسان البالغ؟", a: "32" },
+      { q: "كم عدد ألوان قوس قزح؟", a: "7" },
+      { q: "ما اسم الحيوان الذي يبيض ولا يلد؟", a: "دجاجة" },
+      { q: "ما هو صوت القطة؟", a: "مواء" },
+      { q: "ما هو ناتج 2 × 4؟", a: "8" },
+      { q: "ما هو الشيء الذي إذا شرب مات؟", a: "النار" },
+      { q: "ما هو الشيء الذي يمشي بلا أرجل؟", a: "الوقت" },
+      { q: "ما هو عكس كلمة طويل؟", a: "قصير" },
+      { q: "كم قلب للأخطبوط؟", a: "3" },
+      { q: "ما اسم الحيوان الذي عنده سنام؟", a: "جمل" },
+      { q: "ما هو الشيء الذي له رأس ولا عين له؟", a: "الدبوس" },
+      { q: "ما هو ناتج 9 + 1؟", a: "10" },
+      { q: "من هو مخترع المصباح الكهربائي؟", a: "توماس إديسون" },
+      { q: "ما اسم عاصمة العراق؟", a: "بغداد" },
+      { q: "كم ضلع في المربع؟", a: "4" },
+      { q: "كم عدد الكواكب؟", a: "8" },
+      { q: "ما هو أكبر كوكب؟", a: "المشتري" }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function addMessage(text, sender) {
+      const chatBox = document.getElementById("chat-box");
+      const message = document.createElement("div");
+      message.className = "message " + sender;
+      message.innerText = text;
+      chatBox.appendChild(message);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function handleUserInput() {
+      const input = document.getElementById("user-input");
+      const userText = input.value.trim();
+      if (!userText) return;
+
+      addMessage(userText, "user");
+      input.value = "";
+
+      const correctAnswer = questions[currentQuestion].a;
+      if (userText === correctAnswer) {
+        addMessage("أحسنت! إجابة صحيحة 🎉", "bot");
+        score += 1;
+        document.getElementById("score").innerText = score;
+      } else {
+        addMessage("ليست الإجابة الصحيحة. حاول مرة أخرى!", "bot");
+      }
+
+      currentQuestion = (currentQuestion + 1) % questions.length;
+      setTimeout(() => {
+        addMessage(questions[currentQuestion].q, "bot");
+      }, 1000);
+    }
+
+    window.onload = () => {
+      addMessage(questions[currentQuestion].q, "bot");
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <link rel="stylesheet" href="css/all.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-blk">
+ <!-- Spinner Start  -->
+<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+<!-- Spinner End -->
+    <div class="settings-box">
+        <div class="toggle-settings">
+         
+          <i class=" fa fa-gear open"></i>
+        </div>
+        <div class="setting-container">
+          
+          <div class="option-box">
+            <h4>Colors</h4>
+            <ul class="colors-list">
+                <li class="active" data-color=" #ff9800"></li>
+                <li data-color=" #009688"></li>
+                <li data-color="#03a9f4"></li>
+                <li data-color=" #FF8C9E"></li>
+                <li data-color=" #CBA1E0"></li>
+           
+            </ul>
+            <div class="mode text-center">
+                <i class="fa-moon fa-solid switch"></i>
+               
+            </div>
+          </div>
+         
+        </div>
+      </div>
+<div id="login-main" class="">
+    <div class="container">
+     
+        <div class="inbut-box">
+            <header>
+                <h3 class="text-center py-5">Login</h3>
+            </header>
+            <div class="form-floating mb-3 ">
+                <input type="text"  oninput="validationLogin(this)" class="form-control border-0 border-bottom rounded-0"  id="Email" placeholder="Email" required>
+                <label for="productName">Email </label>
+                <i class="fa-solid fa-envelope "></i>
+            </div>
+          
+                <div class="form-floating mb-3 ">
+                    <input type="password"  oninput="validationLogin(this)"  class="form-control border-0 border-bottom rounded-0"  id="password" placeholder="password" required>
+                    <label for="productName"> password </label>
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <div class="form-check d-flex justify-content-between">
+                    <div class="check">
+                        <input type="checkbox"    class="form-check-input" style="color: black;" id="rememberMe">
+                        <label class="form-check-label" for="rememberMe">Remember me</label>
+                    </div>
+                    <div class="forget">
+                        <a href="#" class="forgot-password">Forgot Password?</a>
+                    </div>
+                  
+                </div>
+                <div id="errorMessage" class="text-danger mb-3 d-none">Please fill in all fields correctly.</div>
+                <button class="btn btn-my form-control mt-3" id="sumbitLogin">Login</button>
+             <footer>
+                <p class="text-center text-muted mt-3">Don't have an account? <a href="" id="signUp">Sign Up</a></p>
+             </footer>
+             
+            
+        </div>
+    </div>
+</div>
+
+
+
+<!------------------------------------------------------------- --------------------------------------------------------- -->
+
+
+
+ <div id="Registration" class="d-none">
+    <div class="container">
+     
+        <div class="inbut-box">
+            <header>
+                <h3 class="text-center py-5">Registration</h3>
+            </header>
+            <div class="form-floating mb-3 ">
+                <input type="text" class="form-control border-0 border-bottom rounded-0"  id="useNameregister" placeholder="useName" required>
+                <span id="useNameregisterError" class="text-danger"></span>
+                <label for="productName">Usename </label>
+                <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="form-floating mb-3 ">
+                <input type="text"  class="form-control border-0 border-bottom rounded-0"  id="emailregister" placeholder="Email" required>
+                <span id="emailregisterError" class="text-danger"></span>
+                <label for="productName"> Email </label>
+                <i class="fa-solid fa-envelope "></i>
+            </div>
+            <div class="form-floating mb-3 ">
+                <input type="password" class="form-control border-0 border-bottom rounded-0"  id="passwordregister" placeholder="password" required>
+                <span id="passwordregisterError" class="text-danger"></span>
+                <label for="productName"> password </label>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+              
+                <div class="form-check d-flex justify-content-between">
+                    <div class="check">
+                        <input type="checkbox"   class="form-check-input" style="color: black;" id="rememberMe">
+                        <label class="form-check-label" for="rememberMe">I agree to terms&conditions </label>
+                    </div>
+                    <div class="forget">
+                        <a href="#" class="forgot-password">Forgot Password?</a>
+                    </div>
+                  
+                </div>
+              
+                <button class="btn btn-my form-control mt-3 " id="submitRegister">Register</button>
+                <div id="errorMessageregister" class="text-danger mb-3 d-none">Please fill in all fields correctly.</div>
+             <footer>
+                <p class="text-center text-muted mt-3">Aready have an account? <a href="" id="login">Login</a></p>
+             </footer>
+             
+            
+        </div>
+    </div>
+</div>
+
+
+
+     <script src="js/bootstrap.min.js"></script>
+     <script src="js/master.js"></script>
+     
+</body>
+</html> 

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../Css/all.css">
+    <link rel="stylesheet" href="../Css/bootstrap.min.css">
+    <title>لعبة إنشاء الأشكال الهندسية</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            color: white;
+         
+
+        } 
+   img{
+    width: 60%;
+   }
+
+
+        .to-back{
+            position: relative;
+        }
+        .back {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        .container {
+         
+            /* padding: 20px; */
+            border-radius: 15px;
+           
+            display: inline-block;
+            margin-top: 20px;
+        }
+        canvas {
+            background: white;
+            border: 4px solid #0288d1;
+            display: block;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .controls {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            color: white;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: linear-gradient(to right, #ff4b2b, #ff416c);
+        }
+        input {
+            padding: 8px;
+            border-radius: 8px;
+            border: 2px solid #0288d1;
+            text-align: center;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body >
+    
+        <div class="to-back">
+            
+            <a class="back" href="../StudentDash.html"> <i class="fa-solid fa-light fa-arrow-left"></i></a>
+
+        </div>
+        <h1 class="py-4">لعبة إنشاء الأشكال الهندسية</h1>
+        <div class="d-flex justify-content-center  align-items-center;">
+           
+          
+            <div class="container">
+              
+                <p class="h3">أدخل عدد الأضلاع لإنشاء شكل هندسي</p>
+                <div class="controls">
+                    <input type="number" id="sidesInput" min="3" max="10" value="3">
+                    <button onclick="drawShape()">ارسم الشكل</button>
+                </div>
+                <canvas id="shapeCanvas" width="400" height="400"></canvas>
+            </div>
+            <div class="item">
+                <img src="./img-game/14123537.png" alt="">
+            </div>
+         </div>
+    <script>
+        const canvas = document.getElementById("shapeCanvas");
+        const ctx = canvas.getContext("2d");
+
+        function drawShape() {
+            let sides = parseInt(document.getElementById("sidesInput").value);
+            if (sides < 3 || sides > 10) {
+                alert("الرجاء إدخال عدد بين 3 و 10");
+                return;
+            }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            let radius = 100;
+            let centerX = canvas.width / 2;
+            let centerY = canvas.height / 2;
+            
+            for (let i = 0; i < sides; i++) {
+                let angle = (i * 2 * Math.PI) / sides - Math.PI / 2;
+                let x = centerX + radius * Math.cos(angle);
+                let y = centerY + radius * Math.sin(angle);
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            ctx.closePath();
+            ctx.strokeStyle = "#ff416c";
+            ctx.lineWidth = 4;
+            ctx.fillStyle = "rgba(255, 75, 43, 0.5)";
+            ctx.fill();
+            ctx.stroke();
+        }
+    </script>
+</body>
+</html>

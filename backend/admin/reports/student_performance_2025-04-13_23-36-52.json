@@ -1,0 +1,18 @@
+{
+    "success": true,
+    "data": [
+        {
+            "UserID": 3,
+            "Username": "Alaa",
+            "Email": "alaa@gmail.com",
+            "SectionName": null,
+            "GradeLevel": null,
+            "AcademicYear": null,
+            "TotalExams": 1,
+            "AverageScore": "100.0000",
+            "HighestScore": 100,
+            "LowestScore": 100
+        }
+    ],
+    "generatedAt": "2025-04-13 23:36:52"
+}

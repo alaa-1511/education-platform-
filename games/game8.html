@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="../Css/all.css">
+  <title>Math Island Adventure</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #e0f7fa;
+      margin: 0;
+      padding: 0;
+      direction: ltr;
+    }
+    .to-back{
+            position: relative;
+        }
+        .back {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        .back-btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+        }
+    .game-container {
+      display: flex;
+      flex-direction: row;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px;
+    }
+    .sidebar {
+      background-color: #26a69a;
+      color: white;
+      width: 250px;
+      border-radius: 30px 0 0 30px;
+      padding: 30px 10px;
+    }
+    .sidebar h2 {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+    .sidebar button {
+      display: block;
+      width: 90%;
+      margin: 10px auto;
+      padding: 12px;
+      font-size: 16px;
+      background-color: #00897b;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .sidebar button:hover {
+      background-color: #004d40;
+    }
+    .content {
+      flex-grow: 1;
+      background-color: white;
+      padding: 30px;
+      border-radius: 0 30px 30px 0;
+      margin-left: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      min-height: 500px;
+    }
+    .number-grid {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .number-grid button, .content button {
+      padding: 12px;
+      font-size: 16px;
+      background-color: #aed581;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .number-grid button:hover, .content button:hover {
+      background-color: #7cb342;
+      color: white;
+    }
+    input {
+      padding: 10px;
+      font-size: 16px;
+      margin: 5px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+    #modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+    #modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      font-size: 24px;
+      color: #4caf50;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="to-back">
+       
+    <a class="back" href="../StudentDash.html"> <i class="fa-solid fa-light fa-arrow-left"></i></a>
+
+</div>
+  <div class="game-container">
+    <div class="sidebar">
+      <h2>Choose Stage</h2>
+      <button onclick="goToStage(1)">Stage 1: Numbers 1-100</button>
+      <button onclick="goToStage(2)">Stage 2: Addition</button>
+      <button onclick="goToStage(3)">Stage 3: Subtraction</button>
+      <button onclick="goToStage(4)">Stage 4: Multiplication</button>
+      <button onclick="goToStage(5)">Stage 5: Division</button>
+      <button onclick="goToStage(6)">Stage 6: Even Division</button>
+      <button onclick="goToStage(7)">Stage 7: Addition (Input)</button>
+      <button onclick="goToStage(8)">Stage 8: Subtraction (Input)</button>
+      <button onclick="goToStage(9)">Stage 9: Multiplication (Input)</button>
+      <button onclick="goToStage(10)">Stage 10: Division (Input)</button>
+    </div>
+    <div class="content" id="mainContent">
+      <h1>🎮 Math Island Adventure 🧠</h1>
+      <p>Select a stage from the menu to begin!</p>
+    </div>
+  </div>
+
+  <div id="modal">
+    <div id="modal-content"></div>
+  </div>
+
+  <script>
+    function showModal(result) {
+      const modal = document.getElementById('modal');
+      const content = document.getElementById('modal-content');
+      content.innerText = `Result: ${result}`;
+      modal.style.display = 'flex';
+      const speech = new SpeechSynthesisUtterance(result.toString());
+      speech.lang = 'ar-SA';
+      speechSynthesis.speak(speech);
+      modal.onclick = () => modal.style.display = 'none';
+    }
+
+    function goToStage(stage) {
+      const container = document.getElementById("mainContent");
+      if (stage === 1) {
+        let html = `<h2>Stage 1: Numbers 1 to 100</h2><div class="number-grid">`;
+        for (let i = 1; i <= 100; i++) {
+          html += `<button onclick="speakNumber(${i})">${i}</button>`;
+        }
+        html += `</div>`;
+        container.innerHTML = html;
+      } else if (stage === 2) {
+        let html = `<h2>Stage 2: Addition (100 Questions)</h2><div class="number-grid">`;
+        for (let i = 0; i < 100; i++) {
+          const a = Math.floor(Math.random() * 50);
+          const b = Math.floor(Math.random() * 50);
+          const result = a + b;
+          html += `<button onclick="showModal(${result})">${a} + ${b}</button>`;
+        }
+        html += `</div>`;
+        container.innerHTML = html;
+      } else if (stage === 3) {
+        let html = `<h2>Stage 3: Subtraction (100 Questions)</h2><div class="number-grid">`;
+        for (let i = 0; i < 100; i++) {
+          const a = Math.floor(Math.random() * 100);
+          const b = Math.floor(Math.random() * a); // نضمن أن الطرح موجب
+          const result = a - b;
+          html += `<button onclick="showModal(${result})">${a} - ${b}</button>`;
+        }
+        html += `</div>`;
+        container.innerHTML = html;
+      } else if (stage === 4) {
+        let html = `<h2>Stage 4: Multiplication (100 Questions)</h2><div class="number-grid">`;
+        for (let i = 0; i < 100; i++) {
+          const a = Math.floor(Math.random() * 13); // جدول الضرب إلى 12
+          const b = Math.floor(Math.random() * 13);
+          const result = a * b;
+          html += `<button onclick="showModal(${result})">${a} × ${b}</button>`;
+        }
+        html += `</div>`;
+        container.innerHTML = html;
+      } else if (stage === 5) {
+        let html = `<h2>Stage 5: Division (100 Questions)</h2><div class="number-grid">`;
+        for (let i = 0; i < 100; i++) {
+          const b = Math.floor(Math.random() * 9) + 1; // من 1 إلى 9
+          const result = Math.floor(Math.random() * 13);
+          const a = b * result;
+          html += `<button onclick="showModal(${result})">${a} ÷ ${b}</button>`;
+        }
+        html += `</div>`;
+        container.innerHTML = html;
+      } else if (stage === 6) {
+        container.innerHTML = `
+          <h2>Stage 6: Even Division</h2>
+          <input type="number" id="even1" placeholder="Even number 1">
+          <input type="number" id="even2" placeholder="Even number 2">
+          <button onclick="evenDivision()">Divide</button>
+        `;
+      } else if (stage === 7) {
+        container.innerHTML = `
+          <h2>Stage 7: Add Inputs</h2>
+          <input type="number" id="a1" placeholder="Number 1">
+          <input type="number" id="a2" placeholder="Number 2">
+          <button onclick="showModal(parseFloat(a1.value) + parseFloat(a2.value))">Add</button>
+        `;
+      } else if (stage === 8) {
+        container.innerHTML = `
+          <h2>Stage 8: Subtract Inputs</h2>
+          <input type="number" id="s1" placeholder="Number 1">
+          <input type="number" id="s2" placeholder="Number 2">
+          <button onclick="showModal(parseFloat(s1.value) - parseFloat(s2.value))">Subtract</button>
+        `;
+      } else if (stage === 9) {
+        container.innerHTML = `
+          <h2>Stage 9: Multiply Inputs</h2>
+          <input type="number" id="m1" placeholder="Number 1">
+          <input type="number" id="m2" placeholder="Number 2">
+          <button onclick="showModal(parseFloat(m1.value) * parseFloat(m2.value))">Multiply</button>
+        `;
+      } else if (stage === 10) {
+        container.innerHTML = `
+          <h2>Stage 10: Divide Inputs</h2>
+          <input type="number" id="d1" placeholder="Number 1">
+          <input type="number" id="d2" placeholder="Number 2">
+          <button onclick="divideInput()">Divide</button>
+        `;
+      }
+    }
+
+    function speakNumber(num) {
+      const utterance = new SpeechSynthesisUtterance(num.toString());
+      utterance.lang = 'ar-SA';
+      speechSynthesis.speak(utterance);
+    }
+
+    function evenDivision() {
+      const a = parseInt(document.getElementById("even1").value);
+      const b = parseInt(document.getElementById("even2").value);
+      if (a % 2 === 0 && b % 2 === 0 && b !== 0) {
+        showModal(a / b);
+      } else {
+        alert("Please enter two even numbers and make sure divisor ≠ 0");
+      }
+    }
+
+    function divideInput() {
+      const a = parseFloat(document.getElementById("d1").value);
+      const b = parseFloat(document.getElementById("d2").value);
+      if (!isNaN(a) && !isNaN(b) && b !== 0) {
+        showModal((a / b).toFixed(2));
+      } else {
+        alert("Enter valid numbers and make sure denominator ≠ 0");
+      }
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+ 

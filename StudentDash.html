@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./Css/all.css">
+    <link rel="stylesheet" href="./Css/bootstrap.min.css">
+    <link rel="stylesheet" href="./Css/styles.css">
+    <link rel="stylesheet" href="./Css/chatbot.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Student</title>
+</head>
+
+<body>
+<div class="wrapper">
+    <aside id="sidebar" class="js-sidebar ">
+        <div style="height: 100vh;">
+            <div class="sidebar-logo">
+                <a href="#">EduFun</a>
+            </div>
+            <ul class="sidebar-nav">
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link active" data-section="dashboard">
+                        <i class="fa-solid fa-house pe-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-section="courses">
+                        <i class="fa-solid fa-book-open pe-2"></i> Enrolled Courses
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-section="all-courses">
+                        <i class="fa-solid fa-graduation-cap pe-2"></i> All Courses
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-section="exams">
+                        <i class="fa-solid fa-file-alt pe-2"></i> Exams
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-section="results">
+                        <i class="fa-solid fa-chart-bar pe-2"></i> Results
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-section="educational-Games">
+                        <i class="fa-solid fa-gamepad pe-2"></i> Educational Games
+                    </a>
+                </li>
+
+
+            </ul>
+        </div>
+    </aside>
+    <div class="main">
+        <nav class="navbar navbar-expand px-3 border-bottom">
+            <button class="btn" id="sidebar-toggle" type="button">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class=" navbar">
+                <ul class="navbar-nav">
+                    <li class=" dropdown">
+                        <a href="#" data-bs-toggle="dropdown" class="nav-icon pe-md-0">
+                           
+                            <img id="sprofilePicture" class="avatar img-fluid rounded" src="" alt="Profile Picture" >
+
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a href="#" class="dropdown-item sidebar-link "  data-section="profile">Profile</a>
+                            <a href="#" onclick="logout()" class="dropdown-item sidebar-link ">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <main class="content px-3 py-2">
+            <div id="dashboard" class="section" style="display: block;">
+                <div class="row mb-4">
+                    <div class="col-md-4 dashcard ">
+                        <div class="card stat-card shadow-sm">
+                            <div class="card-body text-center">
+                                <h5 class="card-title text-secondary">Enrolled Courses</h5>
+                                <p class="card-text display-6 text-primary">5 Courses</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 dashcard">
+                        <div class="card stat-card shadow-sm">
+                            <div class="card-body text-center">
+                                <h5 class="card-title text-secondary">Completed Lessons</h5>
+                                <p class="card-text display-6 text-success">30 Lessons</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 dashcard">
+                        <div class="card stat-card shadow-sm">
+                            <div class="card-body text-center">
+                                <h5 class="card-title text-secondary">Average Score</h5>
+                                <p class="card-text display-6 text-warning">85%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <!-- Progress Overview Chart -->
+                    <div class="col-md-6">
+                        <div class="card shadow-sm">
+                            <div class="card-header ">
+                                <h5 class="mb-0">Progress Overview</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="progressChart" width="400" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Exam Results Chart -->
+                    <div class="col-md-6">
+                        <div class="card shadow-sm">
+                            <div class="card-header ">
+                                <h5 class="mb-0">Exam Results</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="resultsChart" width="400" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-4"> 
+                    <div class="col-md-12">
+                        <div class="card shadow-sm">
+                            <div class="card-header ">
+                                <h5 class="mb-0">My Active Courses</h5>
+                            </div>
+
+                            <div class="container mx-auto mt-4">
+                                <div class="row" id="coursesContainer1">
+
+                                </div>
+                            </div>
+                          
+                        </div>
+                    </div>
+                </div>
+              
+                
+            </div>
+            <div id="courses" class="section" style="display: none;">
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <div class="card shadow-sm">
+                            <div class="card-header ">
+                                <h5 class="mb-0">My Active Courses</h5>
+                            </div>
+
+                            <div class="container mx-auto mt-4">
+                                <div class="row" id="coursesContainer2">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="all-courses" class="section" style="display: none;">
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h2 class="mb-3">All Available Courses</h2>
+                        <p class="text-muted">Browse and enroll in courses that interest you.</p>
+                    </div>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card shadow-sm">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Course Catalog</h5>
+                                <div class="input-group w-50">
+                                    <input type="text" id="searchInput" class="form-control" placeholder="Search courses...">
+                                    <button class="btn btn-outline-secondary" type="button" id="searchButton">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row" id="allCoursesContainer">
+                                    <!-- Courses will be loaded here dynamically -->
+                                    <div class="col-12 text-center py-5">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-2">Loading courses...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="CourseDetails" class="section" style="display: none;">
+                <section class="course-details py-5">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="instructor-card mb-5">
+                                    <div class="d-flex align-items-center">
+                                        <img src="./IMG/doctor2.png" alt="Instructor" class="rounded-circle me-3" width="80">
+                                        <div>
+                                            <h4>Ahmed Mohamed</h4>
+                                            <p class="text-muted">Web developer with 10 years of experience</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-5">
+                                    <h3 class="mb-4">What will you learn in this course?</h3>
+                                    <ul class="list-unstyled">
+                                        <li class="mb-3"><i class="fas fa-check text-success me-2"></i>Create interactive web applications</li>
+                                        <li class="mb-3"><i class="fas fa-check text-success me-2"></i>State management with Redux</li>
+                                        <li class="mb-3"><i class="fas fa-check text-success me-2"></i>Integration with REST APIs</li>
+                                    </ul>
+                                </div>
+
+                                <div class="curriculum mb-5">
+                                    <h3 class="mb-4">Course Content</h3>
+                                    <div class="curriculum-item">
+                                        <h5>Introduction to React</h5>
+                                        <p class="text-muted">3 lessons • 45 minutes</p>
+                                    </div>
+                                    <!-- Repeat items based on content -->
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="card shadow mb-4">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-4">Enroll Now</h4>
+
+                                        <button class="btn enroll-btn w-100">Enroll Now</button>
+
+                                        <hr class="my-4">
+
+                                        <div class="course-info">
+                                            <p><i class="fas fa-clock me-2"></i>Duration: 30 hours</p>
+                                            <p><i class="fas fa-layer-group me-2"></i>Level: Intermediate</p>
+                                            <p><i class="fas fa-certificate me-2"></i>Certificate of Completion</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div id="CourseMaterials" class="section" style="display: none;">
+                <div class="course-materials-container">
+                    <div class="row">
+                        <!-- Main Content Section -->
+                        <div class="col-md-8 main-content p-5">
+                            <!-- Course Header -->
+                            <div class="course-header mb-5">
+                                <h1 class="display-5 fw-bold" id="courseTitle">Loading Course...</h1>
+                                <div class="d-flex align-items-center text-muted">
+                                    <span class="me-3" id="totalLessons"><i class="fas fa-book-open me-2"></i>0 Lessons</span>
+                                    <span class="me-3" id="totalQuizzes"><i class="fas fa-question-circle me-2"></i>0 Quizzes</span>
+                                    <span id="courseDuration"><i class="fas fa-clock me-2"></i>0 Hours</span>
+                                </div>
+                            </div>
+            
+                            <!-- Lessons List -->
+                            <div class="lessons-list" id="lessonsContainer">
+                                <div class="text-center py-5">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="mt-2">Loading course materials...</p>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <!-- Sidebar Section -->
+                        <div class="col-md-4 course-sidebar p-4">
+                            <!-- Progress Card -->
+                            <div class="progress-card mb-4 p-3 border rounded">
+                                <h5 class="mb-3">Your Progress</h5>
+                                <div class="progress mb-3" style="height: 20px;">
+                                    <div class="progress-bar bg-success" id="progressBar" role="progressbar" style="width: 0%;">0%</div>
+                                </div>
+                                <div class="stats">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Completed Lessons:</span>
+                                        <span id="completedLessons">0/0</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span>Completed Quizzes:</span>
+                                        <span id="completedQuizzes">0/0</span>
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <!-- Quick Navigation -->
+                            <div class="quick-lesson-nav mb-4">
+                                <h5 class="mb-3"><i class="fas fa-list-ul me-2"></i>Course Lessons</h5>
+                                <div class="list-group" id="lessonsNavigation">
+                                    <div class="text-center py-3 text-muted">
+                                        <i class="fas fa-circle-notch fa-spin me-2"></i>
+                                        Loading lessons...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="QuizSection" class="section" style="display: none;">
+                    <div class="container">
+                        <div id="quizContainer" class="quiz-container mt-4">
+                            <!-- Dynamic quiz content will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+          
+            <div id="exams" class="section" style="display: none;">
+                <h4>Exams</h4>
+                <p class="text-muted">Below is the list of your upcoming and ongoing exams:</p>
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Exam Title</th>
+                                    <th>Course</th>
+                                    <th>Date</th>
+                                    <th>Duration</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="examTableBody">
+                                <tr><td colspan="5" class="text-center">Loading exams...</td></tr>
+                            </tbody>
+                        </table>
+                    </div> 
+                </div> 
+            </div>
+            
+            <!-- قسم عرض الامتحان (مخفي بالبداية) -->
+            <div id="examView" class="section" style="display: none;">
+                <div class="card shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 id="examTitle"></h4>
+                        <button id="backToExams" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to Exams
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="exam-info mb-4">
+                            <p><strong>Duration:</strong> <span id="examDuration"></span></p>
+                        </div>
+                        <form id="examForm">
+                            <div id="examQuestionsContainer"></div>
+                            <button type="submit" class="btn btn-primary mt-3">Submit Exam</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="results" class="section" style="display: none;">
+                <h4>Results</h4>
+                <p class="text-muted">Below is a summary of your previous exam results:</p>
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Exam Title</th>
+                                    <th>Course</th>
+                                    <th>Date</th>
+                                    <th>Score</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resultsTableBody">
+                                <!-- سيتم ملؤه ديناميكيًا عبر JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+           <div id="educational-Games" class="section" style="display: none;" id="back-me">
+              
+                <div class="game">
+                 <div class="container">
+                    <h1 class="text-center mb-5">Educational Games</h1>
+
+                     <div class="row">
+                       
+                         <div class="col-md-4">
+                             <div class="item">
+                                 <div class="card">
+                                     <img src="./games/img-game/291374.jpeg.webp" class="card-img-top" alt="...">
+                                     <div class="card-body">
+                                      
+                                        
+                                       <a href="./games/game11/index.html" class="btn btn-primary mb-1 mt-2">Go to game</a>
+                                     </div>
+                                   </div>
+                             </div>
+                         </div>
+                        
+                        <div class="col-md-4">
+                             <div class="item">
+                                 <div class="card">
+                                     <img src="./games/img-game/eng1.jpg" class="card-img-top" alt="...">
+                                     <div class="card-body">
+                                       
+                                       <a href="./games/game1.html" class="btn btn-primary mb-2 mt-2">Go to game</a>
+                                     </div>
+                                   </div>
+                             </div>
+                         </div>
+                         <div class="col-md-4">
+                            <div class="item">
+                                <div class="card">
+                                    <img src="./games/game11/img/41627-صورة-أرشيفية1.webp" class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                      
+                                      
+                                      <a href="./games/game10.html" class="btn btn-primary mb-2 mt-2">Go to game</a>
+                                    </div>
+                                  </div>
+                            </div>
+                        </div>
+                         <div class="col-md-4">
+                             <div class="item">
+                                 <div class="card">
+                                     <img src="./games/img-game/arbic1.webp" class="card-img-top" alt="...">
+                                     <div class="card-body">
+                           
+                                       
+
+                                    
+                                       <a href="./games/game2.html" class="btn btn-primary">Go to game</a>
+                                     </div>
+                                   </div>
+                             </div>
+                         </div>
+                         <div class="col-md-4">
+                             <div class="item">
+                                 <div class="card">
+                                     <img src="./games/img-game/eng2.jpg" class="card-img-top" alt="...">
+                                     <div class="card-body">
+                                        
+                                   
+                                       </p>
+                                       <a href="./games/game4.html" class="btn btn-primary ">Go to game</a>
+                                     </div>
+                                   </div>
+                             </div>
+                         </div>
+                         <div class="col-md-4">
+                            <div class="item">
+                                <div class="card">
+                                    <img src="./games/img-game/number1.jpg" class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                    
+                                      </p>
+                                      <a href="./games/game8.html" class="btn btn-primary">Go to game</a>
+                                    </div>
+                                  </div>
+                            </div>
+                        </div>
+                         <div class="col-md-4">
+                             <div class="item">
+                                 <div class="card">
+                                     <img src="./games/img-game/arbic2.webp" class="card-img-top" alt="...">
+                                     <div class="card-body">
+                                       
+                                       
+                                       <a href="./games/game5.html" class="btn btn-primary">Go to game</a>
+                                     </div>
+                                   </div>
+                             </div>
+                         </div>
+                         <div class="col-md-4">
+                             <div class="item">
+                                 <div class="card">
+                                     <img src="./games/img-game/math5.jpg" class="card-img-top" alt="...">
+                                     <div class="card-body">
+                                      
+                                    
+                                       <a href="./games/game9.html" class="btn btn-primary">Go to game</a>
+                                     </div>
+                                   </div>
+                             </div>
+                         </div>
+                         <div class="col-md-4">
+                             <div class="item">
+                                 <div class="card">
+                                     <img src="./games/img-game/math3.jpg" class="card-img-top" alt="...">
+                                     <div class="card-body">
+                                       
+                                     
+                                       <a href="./games/game7.html" class="btn btn-primary">Go to game</a>
+                                     </div>
+                                   </div>
+                             </div>
+                         </div>
+                         <div class="col-md-4">
+                             <div class="item">
+                                 <div class="card">
+                                     <img src="./games/img-game/math1.webp" class="card-img-top" alt="...">
+                                     <div class="card-body">
+                                     
+                                      
+                                       <a href="./games/game3.html" class="btn btn-primary">Go to game</a>
+                                     </div>
+                                   </div>
+                             </div>
+                         </div>
+                         <div class="col-md-4">
+                             <div class="item">
+                                 <div class="card">
+                                     <img src="./games/img-game/math4.jpg" class="card-img-top" alt="...">
+                                     <div class="card-body">
+                                   
+                                       <a href="./games/game6.html" class="btn btn-primary">Go to game</a>
+                                     </div>
+                                   </div>
+                             </div>
+                         </div>
+
+                     </div>
+                  
+                 </div>
+                </div>         
+         </div>
+            <div id="profile" class="section" style="display: none;">
+                <div class="container-xl px-4 mt-4">
+                    <!-- Navigation Tabs -->
+                    <nav class="nav nav-borders">
+                        <a class="nav-link active ms-0" href="#profile-tab" data-bs-toggle="tab">Profile</a>
+                        <a class="nav-link" href="#settings-tab" data-bs-toggle="tab">Settings</a>
+                    </nav>
+                    <hr class="mt-0 mb-4">
+            
+                    <!-- Tab Content -->
+                    <div class="tab-content">
+                        <!-- Profile Section -->
+                        <div class="tab-pane fade show active" id="profile-tab">
+                            <div class="row">
+                                <div class="col-xl-4">
+                                    <!-- Profile Picture -->
+                                    <div class="card mb-4 mb-xl-0">
+                                        <div class="card-header">Profile Picture</div>
+                                        <div class="card-body text-center">
+                                            
+                                            <img id="profilePicture" class="avatar img-fluid rounded" src="" alt="Profile Picture" >
+                                            <div class="small font-italic text-muted mb-4">JPG or PNG, max 5 MB</div>
+                                            <input type="file" id="profileImageUpload" accept="IMG/*" style="display: none;">
+                                            <button class="btn btn-primary" type="button" onclick="document.getElementById('profileImageUpload').click()">Upload New Image</button>
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                <!-- Account Details -->
+                                <div class="col-xl-8">
+                                    <div class="card mb-4">
+                                        <div class="card-header">Account Details</div>
+                                        <div class="card-body">
+                                            <form id="profileForm">
+                                                <div class="mb-3">
+                                                    <label class="small mb-1">Username</label>
+                                                    <input class="form-control" type="text" id="username" name="username">
+                                                </div>
+            
+                                                <div class="row gx-3 mb-3">
+                                                    <div class="col-md-6">
+                                                        <label class="small mb-1">First Name</label>
+                                                        <input class="form-control" type="text" id="firstName" name="firstName">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="small mb-1">Last Name</label>
+                                                        <input class="form-control" type="text" id="lastName" name="lastName">
+                                                    </div>
+                                                </div>
+            
+                                                <div class="mb-3">
+                                                    <label class="small mb-1">Email</label>
+                                                    <input class="form-control" type="email" id="email" name="email">
+                                                </div>
+            
+                                                <div class="mb-3">
+                                                    <label class="small mb-1">Bio</label>
+                                                    <textarea class="form-control" id="bio" name="bio" rows="3"></textarea>
+                                                </div>
+            
+                                                <button class="btn btn-primary" type="button" onclick="saveProfileChanges()">Save Changes</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <!-- Settings Section -->
+                        <div class="tab-pane fade" id="settings-tab">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <!-- Change Password -->
+                                    <div class="card mb-4">
+                                        <div class="card-header">Change Password</div>
+                                        <div class="card-body">
+                                            <form id="passwordForm">
+                                                <div class="mb-3">
+                                                    <label class="small mb-1">Current Password</label>
+                                                    <input class="form-control" type="password" id="currentPassword" placeholder="Enter current password">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="small mb-1">New Password</label>
+                                                    <input class="form-control" type="password" id="newPassword" placeholder="Enter new password">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="small mb-1">Confirm Password</label>
+                                                    <input class="form-control" type="password" id="confirmPassword" placeholder="Re-enter new password">
+                                                </div>
+                                                <button class="btn btn-primary" type="button" onclick="changePassword()">Save</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                <div class="col-lg-4">
+                                    <!-- Delete Account -->
+                                    <div class="card mb-4">
+                                        <div class="card-header">Delete Account</div>
+                                        <div class="card-body">
+                                            <p>This action is permanent and cannot be undone. Ensure you want to delete your account.</p>
+                                            <button class="btn btn-danger" type="button" onclick="confirmDeleteAccount()">Delete My Account</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+        <a href="#" class="theme-toggle">
+            <i class="fa-regular fa-moon"></i>
+            <i class="fa-regular fa-sun"></i>
+        </a>
+
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="enrollmentToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">Enrollment Status</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="toastMessage">
+            Course enrolled successfully!
+        </div>
+    </div>
+</div>
+
+<!-- Chatbot Container -->
+<div class="chat-container hidden" id="chat-container">
+    <button id="chat-toggle">
+        <span>Chat with AI Assistant</span>
+        <i class="fas fa-comments"></i>
+    </button>
+    <div id="chat-box"></div>
+    <div class="chat-input-container">
+        <input type="text" id="user-input" placeholder="Type your message...">
+        <button id="send-button">
+            <i class="fas fa-paper-plane"></i>
+        </button>
+    </div>
+</div>
+
+<script src="./js/bootstrap.bundle.min.js"></script>
+<script src="./js/main.js"></script>
+<script src="./js/studentDash.js"></script>
+<script src="./js/chatbot.js"></script>
+
+</body>
+
+</html>
